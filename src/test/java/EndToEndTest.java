@@ -23,7 +23,7 @@ public class EndToEndTest extends AbstractFarsandra {
   @Test
   public void testShutdownWithLatch() throws InterruptedException {
     assertTrue("Cassandra is not running", fs.getManager().isRunning());
-    CqlCacheSource source = new CqlCacheSource("test", "cache", 40);
+    CqlCacheSource source = new CqlCacheSource("test", "cache", new String [] {"127.0.0.1"}, 40);
     DirectSource<String,String> lc = new DirectSource<String,String>(){
       private AtomicLong getCounter = new AtomicLong(0);
       @Override
@@ -50,7 +50,7 @@ public class EndToEndTest extends AbstractFarsandra {
   @Test
   public void testShutdownWithCustomTypes() throws InterruptedException {
     assertTrue("Cassandra is not running", fs.getManager().isRunning());
-    CqlCacheSource source = new CqlCacheSource("test", "cache", 40);
+    CqlCacheSource source = new CqlCacheSource("test", "cache", new String [] {"127.0.0.1"}, 40);
     DirectSource<String,String> lc = new DirectSource<String,String>(){
       private AtomicLong getCounter = new AtomicLong(0);
       @Override
@@ -118,7 +118,7 @@ public class EndToEndTest extends AbstractFarsandra {
   
   @Test
   public void complexTypes(){
-    CqlCacheSource source = new CqlCacheSource("test", "cache", 40);
+    CqlCacheSource source = new CqlCacheSource("test", "cache", new String [] {"127.0.0.1"}, 40);
     DirectSource<Foobar,Wombat> lc = new DirectSource<Foobar,Wombat>(){
       private AtomicLong getCounter = new AtomicLong(0);
       @Override

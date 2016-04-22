@@ -1,5 +1,6 @@
 
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.datastax.driver.core.Cluster;
@@ -18,8 +19,8 @@ public class CqlCacheSource implements CacheSource {
   private AtomicLong getCount = new AtomicLong(0);
   private AtomicLong setCount = new AtomicLong(0);
   
-  public CqlCacheSource (String keyspace, String cacheName, int ttlSeconds){
-    cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+  public CqlCacheSource (String keyspace, String cacheName, String [] hosts, int ttlSeconds){
+    cluster = Cluster.builder().addContactPoints(hosts).build();
     session = cluster.connect();
     session.execute("CREATE KEYSPACE IF NOT EXISTS " + keyspace + 
 " WITH REPLICATION ={ 'class' : 'SimpleStrategy', 'replication_factor' : 1 }");
