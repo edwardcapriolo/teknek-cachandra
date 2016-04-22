@@ -1,22 +1,12 @@
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.teknek.farsandra.Farsandra;
-import io.teknek.farsandra.LineHandler;
-import io.teknek.farsandra.ProcessHandler;
 
 public class EndToEndTest extends AbstractFarsandra {
   
