@@ -1,6 +1,4 @@
 
-
-import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.datastax.driver.core.Cluster;
@@ -51,13 +49,4 @@ public class CqlCacheSource implements CacheSource {
     session.execute(preparedSet.bind(key, value, ttlSeconds));
   }
 
-  @Override
-  public long getSetCount() {
-    return setCount.get();
-  }
-
-  @Override
-  public long getGetCount() {
-    return getCount.get();
-  }  
 }

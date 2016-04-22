@@ -12,6 +12,8 @@ public class Cacheandra<Key,Value> {
   private final CacheSource cacheSource;
   private final TypeReference<Value> valueTypeReference;
   private final AtomicLong directSourceGetCount = new AtomicLong(0);
+  private final AtomicLong cacheSourceGetCount = new AtomicLong(0);
+  private final AtomicLong cacheSourceSetCount = new AtomicLong(0);
 
   public Cacheandra(DirectSource<Key,Value> loadingCache, 
           CacheSource storageSource, TypeReference<Value> valueRef){
@@ -34,6 +36,7 @@ public class Cacheandra<Key,Value> {
       throw new RuntimeException(e);
     }
     String result = cacheSource.get(search);
+    cacheSourceGetCount.getAndIncrement();
     if (result != null){
       try {
         return (Value) om.readValue(result, valueTypeReference);
@@ -45,6 +48,7 @@ public class Cacheandra<Key,Value> {
       directSourceGetCount.getAndIncrement();
       try {
         cacheSource.set(search, om.writeValueAsString(v));
+        cacheSourceSetCount.getAndIncrement();
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
       }
@@ -54,6 +58,14 @@ public class Cacheandra<Key,Value> {
 
   public long getDirectSourceGetCount() {
     return directSourceGetCount.get();
+  }
+
+  public long getCacheSourceGetCount() {
+    return cacheSourceGetCount.get();
+  }
+
+  public long getCacheSourceSetCount() {
+    return cacheSourceSetCount.get();
   }
   
 }
