@@ -6,24 +6,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Cacheandra<Key,Value> {
 
-  private final LoadingCache<Key,Value> loadingCache;
+  private final DirectSource<Key,Value> loadingCache;
   private final ObjectMapper om;
   private final CacheSource storageSource;
-  private final com.fasterxml.jackson.core.type.TypeReference<Value> valueTypeReference;
-  private final com.fasterxml.jackson.core.type.TypeReference<Key> keyTypeReference;
+  private final TypeReference<Value> valueTypeReference;
 
-  public Cacheandra(LoadingCache<Key,Value> loadingCache, 
-          CacheSource storageSource){
-    this(loadingCache, new ObjectMapper(), storageSource);
+  public Cacheandra(DirectSource<Key,Value> loadingCache, 
+          CacheSource storageSource, TypeReference<Value> valueRef){
+    this(loadingCache, new ObjectMapper(), storageSource, valueRef );
   }
   
-  public Cacheandra(LoadingCache<Key,Value> loadingCache, 
-          ObjectMapper om, CacheSource storageSource ){
+  public Cacheandra(DirectSource<Key,Value> loadingCache, 
+          ObjectMapper om, CacheSource storageSource, TypeReference<Value> valueRef){
     this.loadingCache = loadingCache;
     this.om = om;
     this.storageSource = storageSource;
-    valueTypeReference = new TypeReference<Value>(){};
-    keyTypeReference = new TypeReference<Key>(){};
+    valueTypeReference = valueRef;
   }
   
   public Value get(Key key){
