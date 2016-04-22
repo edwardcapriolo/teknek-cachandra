@@ -1,5 +1,9 @@
 import static org.junit.Assert.assertTrue;
 
+import io.teknek.cachandra.Cacheandra;
+import io.teknek.cachandra.CqlCacheSource;
+import io.teknek.cachandra.DirectSource;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.Assert;
@@ -11,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EndToEndTest extends AbstractFarsandra {
   
   @Test
-  public void testShutdownWithLatch() throws InterruptedException {
+  public void testWithStrings() throws InterruptedException {
     assertTrue("Cassandra is not running", fs.getManager().isRunning());
     CqlCacheSource source = new CqlCacheSource("test", "cache", new String [] {"127.0.0.1"}, 40);
     DirectSource<String,String> lc = new DirectSource<String,String>(){
@@ -19,7 +23,7 @@ public class EndToEndTest extends AbstractFarsandra {
       @Override
       public String get(String key) {
         getCounter.incrementAndGet();
-        //querying real datastore
+        //querying real datastore..bzzz
         return key + key; 
       }
      };
@@ -36,7 +40,7 @@ public class EndToEndTest extends AbstractFarsandra {
   }
   
   @Test
-  public void testShutdownWithCustomTypes() throws InterruptedException {
+  public void testWithCustomTypes() throws InterruptedException {
     assertTrue("Cassandra is not running", fs.getManager().isRunning());
     CqlCacheSource source = new CqlCacheSource("test", "cache", new String [] {"127.0.0.1"}, 40);
     DirectSource<String,String> lc = new DirectSource<String,String>(){
