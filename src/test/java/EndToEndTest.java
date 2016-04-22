@@ -22,19 +22,17 @@ public class EndToEndTest extends AbstractFarsandra {
         //querying real datastore
         return key + key; 
       }
-      @Override
-      public long getGetCount() {
-        return getCounter.get();
-      }};
+     };
     Cacheandra<String,String> c = new Cacheandra<>(lc, new ObjectMapper(), 
             source, new TypeReference<String>(){ });
     Assert.assertEquals("hoho", c.get("ho"));
     Assert.assertEquals(1, source.getSetCount());
-    Assert.assertEquals(1, lc.getGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
     Assert.assertEquals("hoho", c.get("ho"));
     Assert.assertEquals(1, source.getSetCount());
     Assert.assertEquals(2, source.getGetCount());
-    Assert.assertEquals(1, lc.getGetCount());Assert.assertEquals(1, lc.getGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
   }
   
   @Test
@@ -48,20 +46,17 @@ public class EndToEndTest extends AbstractFarsandra {
         getCounter.incrementAndGet();
         //querying real datastore
         return key + key; 
-      }
-      @Override
-      public long getGetCount() {
-        return getCounter.get();
       }};
     Cacheandra<String,String> c = new Cacheandra<>(lc, new ObjectMapper(), 
             source, new TypeReference<String>(){ });
     Assert.assertEquals("hoho", c.get("ho"));
     Assert.assertEquals(1, source.getSetCount());
-    Assert.assertEquals(1, lc.getGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
     Assert.assertEquals("hoho", c.get("ho"));
     Assert.assertEquals(1, source.getSetCount());
     Assert.assertEquals(2, source.getGetCount());
-    Assert.assertEquals(1, lc.getGetCount());Assert.assertEquals(1, lc.getGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
+    Assert.assertEquals(1, c.getDirectSourceGetCount());
   }
   
   
@@ -112,10 +107,6 @@ public class EndToEndTest extends AbstractFarsandra {
     DirectSource<Foobar,Wombat> lc = new DirectSource<Foobar,Wombat>(){
       private AtomicLong getCounter = new AtomicLong(0);
       @Override
-      public long getGetCount() {
-        return getCounter.get();
-      }
-      @Override
       public Wombat get(Foobar key) {
         getCounter.incrementAndGet();
         return new Wombat("bzzz...calculating", key.z);
@@ -123,12 +114,12 @@ public class EndToEndTest extends AbstractFarsandra {
      Cacheandra<Foobar,Wombat> c = new Cacheandra<>(lc, new ObjectMapper(), source, new TypeReference<Wombat>(){ });
      Assert.assertEquals(5, c.get(new Foobar(5)).getY()) ;
      Assert.assertEquals(1, source.getSetCount());
-     Assert.assertEquals(1, lc.getGetCount());
+     Assert.assertEquals(1, c.getDirectSourceGetCount());
      Assert.assertEquals(5, c.get(new Foobar(5)).getY()) ;
      Assert.assertEquals(1, source.getSetCount());
      Assert.assertEquals(2, source.getGetCount());
-     Assert.assertEquals(1, lc.getGetCount());
-     Assert.assertEquals(1, lc.getGetCount());
+     Assert.assertEquals(1, c.getDirectSourceGetCount());
+     Assert.assertEquals(1, c.getDirectSourceGetCount());
   }
   
 }

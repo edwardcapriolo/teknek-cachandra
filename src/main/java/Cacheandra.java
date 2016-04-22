@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -10,6 +11,7 @@ public class Cacheandra<Key,Value> {
   private final ObjectMapper om;
   private final CacheSource cacheSource;
   private final TypeReference<Value> valueTypeReference;
+  private final AtomicLong directSourceGetCount = new AtomicLong(0);
 
   public Cacheandra(DirectSource<Key,Value> loadingCache, 
           CacheSource storageSource, TypeReference<Value> valueRef){
@@ -40,6 +42,7 @@ public class Cacheandra<Key,Value> {
       }
     } else  {
       Value v = directSource.get(key);
+      directSourceGetCount.getAndIncrement();
       try {
         cacheSource.set(search, om.writeValueAsString(v));
       } catch (JsonProcessingException e) {
@@ -48,4 +51,9 @@ public class Cacheandra<Key,Value> {
       return v;
     }
   }
+
+  public long getDirectSourceGetCount() {
+    return directSourceGetCount.get();
+  }
+  
 }
